@@ -1,0 +1,6 @@
+crewai
+streamlit
+pandas
+openpyxl
+python-dotenv
+tabulate
