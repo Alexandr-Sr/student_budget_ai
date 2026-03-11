@@ -101,19 +101,21 @@ def deterministic_allocation(df: pd.DataFrame, total_budget: float) -> pd.DataFr
     work["status"] = statuses
     return work
 
-
 def create_gemini_llm() -> LLM:
     api_key = (
         os.getenv("GEMINI_API_KEY")
         or os.getenv("GOOGLE_API_KEY")
         or os.getenv("GOOGLE_GENAI_API_KEY")
     )
-
+    
     if not api_key:
-        raise ValueError(
-            "Не найден API-ключ Gemini. Добавь в .env переменную "
-            "GEMINI_API_KEY=твой_ключ"
-        )
+        try:
+            api_key = st.secrets["GEMINI_API_KEY"]
+        except Exception:
+            raise ValueError(
+                "Не найден API-ключ Gemini. "
+                "Добавь GEMINI_API_KEY в Streamlit Secrets или .env"
+            )
 
     model_name = os.getenv("MODEL", "gemini/gemini-3-flash-preview")
 
